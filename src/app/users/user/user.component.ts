@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Params } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -6,11 +7,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  user: {id: number, name: string};
+  user: { id: number, name: string };
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.user = {
+      id: +this.route.snapshot.paramMap.get('id'),
+      name: this.route.snapshot.paramMap.get('name')
+    }
+
+    this.route.paramMap.subscribe(
+      (params: ParamMap) => {
+        this.user.id = +params.get('id');   //強型別寫法
+        this.user.name = params.get('name');
+      }
+    )
   }
 
 }
